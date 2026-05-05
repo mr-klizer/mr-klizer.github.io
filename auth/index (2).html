@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="ru" translate="no">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1ODkgNTg1Ij48Zz48cGF0aCBmaWxsPSIjZjlmOWY5IiBkPSJNIDc4LjUsMTEuNSBDIDEwMi40MDUsMjkuNDczIDEyOC4wNzIsNDQuOTczIDE1NS41LDU4QyAxNzcuNzUsMDcuODA1NyAyMDAuNzUsNzUuMzA1NyAyMjQuNSw4MC41QyAxNzcuODQ3LDEyNy42NTMgMTMxLjAxNCwxNzQuNjUzIDg0LDIyMS41QyA3MS41NDI2LDE2Ny45MjIgNDguMzc2LDExOS41ODkgMTQuNSw3Ni41QyAyNS4xNTA0LDQ0LjE4MzggNDYuNDgzNywyMi41MTcyIDc4LjUsMTEuNSBaIi8+PC9nPjwvc3ZnPg==">
+<meta name="google" content="notranslate"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PyCatalog — Вход / Регистрация</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+<link rel="stylesheet" href="../assets/styles.css">
+<script type="module" src="../assets/firebase.js"></script>
+</head>
+<body class="notranslate">
+<header id="site-header"></header>
+
+<main class="auth-page">
+  <div class="auth-card">
+    <div class="auth-logo"><span class="material-symbols-rounded">person</span></div>
+    <div class="auth-title" id="auth-card-title">Вход</div>
+    <div class="auth-sub" id="auth-card-sub">Войдите чтобы добавлять программы</div>
+
+    <div id="auth-form-login">
+      <div class="form-group"><label class="form-label" for="li-email">Email</label>
+        <div class="input-with-icon"><span class="input-icon material-symbols-rounded">mail</span>
+        <input class="form-input" id="li-email" type="email" placeholder="email@mail.ru" oninput="clearAuthErr()" autocomplete="email"></div>
+      </div>
+      <div class="form-group"><label class="form-label" for="li-pass">Пароль</label>
+        <div class="input-with-icon"><span class="input-icon material-symbols-rounded">lock</span>
+        <input class="form-input" id="li-pass" type="password" placeholder="••••••••" oninput="clearAuthErr()" onkeydown="if(event.key==='Enter')doLogin()" autocomplete="current-password"></div>
+        <div style="text-align:right;margin-top:4px"><a style="font-size:12px;cursor:pointer;color:var(--acc2)" onclick="switchAuthForm('recover')">Забыли пароль?</a></div>
+      </div>
+      <div class="form-error" id="auth-err" style="display:none;margin-bottom:12px"></div>
+      <button class="btn-sm btn-primary btn-full" onclick="doLogin()">Войти</button>
+      <div class="auth-switch">Нет аккаунта? <a onclick="switchAuthForm('register')">Зарегистрироваться</a></div>
+    </div>
+
+    <div id="auth-form-register" style="display:none">
+      <div class="form-row">
+        <div class="form-group"><label class="form-label" for="reg-login">Логин<span class="req">*</span></label>
+        <input class="form-input" id="reg-login" placeholder="username" autocomplete="username" oninput="clearAuthErr()"></div>
+        <div class="form-group"><label class="form-label" for="reg-nick">Никнейм<span class="req">*</span></label>
+        <input class="form-input" id="reg-nick" placeholder="Отображаемое имя" autocomplete="nickname" oninput="clearAuthErr()"></div>
+      </div>
+      <div class="form-group"><label class="form-label" for="reg-email">Email<span class="req">*</span></label>
+        <div class="input-with-icon"><span class="input-icon material-symbols-rounded">mail</span>
+        <input class="form-input" id="reg-email" type="email" placeholder="email@mail.ru" oninput="clearAuthErr()" autocomplete="email"></div>
+      </div>
+      <div class="form-group"><label class="form-label" for="reg-pass">Пароль<span class="req">*</span></label>
+        <div class="input-with-icon"><span class="input-icon material-symbols-rounded">lock</span>
+        <input class="form-input" id="reg-pass" type="password" placeholder="Минимум 6 символов" oninput="clearAuthErr()" autocomplete="new-password"></div>
+      </div>
+      <div class="form-group"><label class="form-label" for="reg-pass2">Подтверждение пароля<span class="req">*</span></label>
+        <div class="input-with-icon"><span class="input-icon material-symbols-rounded">lock_clock</span>
+        <input class="form-input" id="reg-pass2" type="password" placeholder="Повторите пароль" oninput="clearAuthErr()" onkeydown="if(event.key==='Enter')doRegister()" autocomplete="new-password"></div>
+      </div>
+      <div style="background:var(--bg3);border:1px solid var(--bd2);border-radius:10px;padding:14px;margin-bottom:14px">
+        <div style="font-size:12px;font-weight:700;color:var(--text2);text-transform:uppercase;letter-spacing:.8px;margin-bottom:10px;display:flex;align-items:center;gap:6px">
+          <span class="material-symbols-rounded" style="font-size:15px;color:var(--acc2)">gavel</span>Правила сообщества
+        </div>
+        <ol style="font-size:12px;color:var(--text2);line-height:1.7;padding-left:16px;margin:0;display:flex;flex-direction:column;gap:3px">
+          <li>Публикуйте только собственные проекты или с разрешения автора.</li>
+          <li>Запрещено размещение вредоносного кода, вирусов и эксплойтов.</li>
+          <li>Описание программы должно соответствовать её реальному содержимому.</li>
+          <li>Уважайте других участников в комментариях — без оскорблений и спама.</li>
+          <li>Запрещены проекты, нарушающие законодательство.</li>
+          <li>Администрация вправе удалить любой проект без объяснения причин.</li>
+          <li>Многократное нарушение правил ведёт к постоянной блокировке аккаунта.</li>
+        </ol>
+      </div>
+      <label for="reg-terms" style="display:flex;align-items:flex-start;gap:10px;margin-bottom:14px;cursor:pointer;user-select:none">
+        <div style="position:relative;flex-shrink:0;margin-top:2px;width:18px;height:18px">
+          <input type="checkbox" id="reg-terms" style="position:absolute;inset:0;opacity:0;width:100%;height:100%;cursor:pointer;margin:0;z-index:1">
+          <div id="reg-terms-box" style="width:18px;height:18px;border-radius:5px;border:2px solid var(--bd2);background:var(--bg3);transition:all .15s;display:flex;align-items:center;justify-content:center;pointer-events:none"></div>
+        </div>
+        <span style="font-size:13px;color:var(--text2);line-height:1.5">Я прочитал(а) и принимаю <strong style="color:var(--acc2)">правила сообщества</strong> PyCatalog.</span>
+      </label>
+      <div class="form-error" id="auth-err-reg" style="display:none;margin-bottom:12px"></div>
+      <button class="btn-sm btn-primary btn-full" onclick="doRegister()">Создать аккаунт</button>
+      <div class="auth-switch">Уже есть аккаунт? <a onclick="switchAuthForm('login')">Войти</a></div>
+    </div>
+
+    <div id="auth-form-recover" style="display:none">
+      <p style="font-size:13px;color:var(--text2);margin-bottom:16px">Введите email — мы отправим ссылку для сброса пароля.</p>
+      <div class="form-group"><label class="form-label" for="rec-email">Email</label>
+        <div class="input-with-icon"><span class="input-icon material-symbols-rounded">mail</span>
+        <input class="form-input" id="rec-email" type="email" placeholder="email@mail.ru" onkeydown="if(event.key==='Enter')doRecover()" autocomplete="email"></div>
+      </div>
+      <div id="rec-result" style="display:none;margin-bottom:12px"></div>
+      <button class="btn-sm btn-primary btn-full" onclick="doRecover()">Отправить письмо</button>
+      <div class="auth-switch"><a onclick="switchAuthForm('login')">← Назад к входу</a></div>
+    </div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div class="footer-logo">PyCatalog</div>
+    <div style="font-size:12px;color:var(--text3)">Каталог Python-программ · Firebase + GitHub Storage</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">Разработан <strong style="color:var(--text2)">Klizer</strong></div>
+  </div>
+  <div class="footer-links">
+    <a href="/about/">О проекте</a>
+    <a href="/">Каталог</a>
+    <a href="/support/">Поддержка</a>
+    <a href="/admin/">Модерация</a>
+  </div>
+</footer>
+<script src="../assets/utils.js"></script>
+<script src="../auth.js" defer></script>
+</body>
+</html>

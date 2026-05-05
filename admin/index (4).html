@@ -1,0 +1,73 @@
+<!DOCTYPE html>
+<html lang="ru" translate="no">
+<head>
+<meta charset="UTF-8"/>
+<link rel="icon" type="image/svg+xml" href="data:image/svg+xml;base64,PHN2ZyB4bWxucz0iaHR0cDovL3d3dy53My5vcmcvMjAwMC9zdmciIHZpZXdCb3g9IjAgMCA1ODkgNTg1Ij48Zz48cGF0aCBmaWxsPSIjZjlmOWY5IiBkPSJNIDc4LjUsMTEuNSBDIDEwMi40MDUsMjkuNDczIDEyOC4wNzIsNDQuOTczIDE1NS41LDU4QyAxNzcuNzUsMDcuODA1NyAyMDAuNzUsNzUuMzA1NyAyMjQuNSw4MC41QyAxNzcuODQ3LDEyNy42NTMgMTMxLjAxNCwxNzQuNjUzIDg0LDIyMS41QyA3MS41NDI2LDE2Ny45MjIgNDguMzc2LDExOS41ODkgMTQuNSw3Ni41QyAyNS4xNTA0LDQ0LjE4MzggNDYuNDgzNywyMi41MTcyIDc4LjUsMTEuNSBaIi8+PC9nPjwvc3ZnPg==">
+<meta name="google" content="notranslate"/>
+<meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+<title>PyCatalog — Панель администратора</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=JetBrains+Mono:wght@400;500;600&family=Raleway:ital,wght@0,300;0,400;0,500;0,600;0,700;0,900;1,300&display=swap" rel="stylesheet">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Material+Symbols+Rounded:opsz,wght,FILL,GRAD@24,400,0,0"/>
+<link rel="stylesheet" href="../assets/styles.css">
+<script type="module" src="../assets/firebase.js"></script>
+</head>
+<body class="notranslate">
+<header id="site-header"></header>
+
+<main class="admin-wrap">
+  <div id="admin-login-screen" style="display:flex;align-items:center;justify-content:center;min-height:60vh">
+    <div style="background:var(--bg2);border:1px solid var(--bd2);border-radius:16px;padding:40px;width:400px;max-width:100%;text-align:center">
+      <div style="width:60px;height:60px;border-radius:16px;background:linear-gradient(135deg,var(--red),var(--org));display:flex;align-items:center;justify-content:center;margin:0 auto 20px">
+        <span class="material-symbols-rounded" style="font-size:28px;color:#fff">admin_panel_settings</span>
+      </div>
+      <div style="font-size:20px;font-weight:800;margin-bottom:6px">Панель администратора</div>
+      <div style="font-size:13px;color:var(--text2);margin-bottom:24px">Только для администраторов каталога</div>
+      <a href="/auth/" class="btn-sm btn-primary btn-full" style="margin-bottom:12px;display:flex;justify-content:center"><span class="material-symbols-rounded">login</span>Войти в аккаунт</a>
+      <div id="claim-superadmin-area"></div>
+    </div>
+  </div>
+  <div id="admin-panel-content" style="display:none">
+    <div class="admin-header">
+      <div>
+        <div style="display:flex;align-items:center;gap:12px;margin-bottom:4px">
+          <div class="admin-title">Панель администратора</div>
+          <span class="admin-badge" id="admin-rank-badge"></span>
+        </div>
+        <div style="font-size:13px;color:var(--text2)">Управление программами, пользователями и настройками</div>
+      </div>
+      <a href="/" class="btn-sm btn-outline"><span class="material-symbols-rounded">arrow_back</span>К каталогу</a>
+    </div>
+    <div class="admin-stats" id="admin-stats"></div>
+    <div class="admin-tabs">
+      <button class="admin-tab active" id="atab-programs" onclick="switchAdminTab('programs')">📋 Программы</button>
+      <button class="admin-tab" id="atab-users" onclick="switchAdminTab('users')">👥 Пользователи</button>
+      <button class="admin-tab" id="atab-support" onclick="switchAdminTab('support')">💬 Поддержка</button>
+      <button class="admin-tab" id="atab-catalog" onclick="switchAdminTab('catalog')">🗂️ Каталог</button>
+      <button class="admin-tab" id="atab-database" onclick="switchAdminTab('database')" style="display:none">💾 База данных</button>
+    </div>
+    <div id="admin-tab-programs"></div>
+    <div id="admin-tab-users" style="display:none"></div>
+    <div id="admin-tab-support" style="display:none"></div>
+    <div id="admin-tab-catalog" style="display:none"></div>
+    <div id="admin-tab-database" style="display:none"></div>
+  </div>
+</main>
+
+<footer class="footer">
+  <div style="display:flex;flex-direction:column;gap:6px">
+    <div class="footer-logo">PyCatalog</div>
+    <div style="font-size:12px;color:var(--text3)">Каталог Python-программ · Firebase + GitHub Storage</div>
+    <div style="font-size:12px;color:var(--text3);margin-top:4px">Разработан <strong style="color:var(--text2)">Klizer</strong></div>
+  </div>
+  <div class="footer-links">
+    <a href="/about/">О проекте</a>
+    <a href="/">Каталог</a>
+    <a href="/support/">Поддержка</a>
+    <a href="/admin/">Модерация</a>
+  </div>
+</footer>
+<script src="../assets/utils.js"></script>
+<script src="../admin.js" defer></script>
+</body>
+</html>

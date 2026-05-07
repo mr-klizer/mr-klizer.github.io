@@ -1,0 +1,5 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 64 64">
+  <rect width="64" height="64" rx="14" fill="#0d0f14"/>
+  <polygon points="32,8 56,21 56,43 32,56 8,43 8,21" fill="none" stroke="#00e5a0" stroke-width="3"/>
+  <text x="32" y="40" font-family="monospace" font-size="22" font-weight="bold" fill="#00e5a0" text-anchor="middle">Py</text>
+</svg>

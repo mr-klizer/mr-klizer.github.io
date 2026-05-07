@@ -1,0 +1,83 @@
+/* =============================================
+   PyCatalog — CSS Variables (Themes)
+   ============================================= */
+
+:root {
+  /* Typography */
+  --font-display: 'Syne', sans-serif;
+  --font-mono: 'Space Mono', monospace;
+
+  /* Accent */
+  --accent:        #00e5a0;
+  --accent-dim:    #00b87e;
+  --accent-glow:   rgba(0, 229, 160, 0.18);
+  --accent-soft:   rgba(0, 229, 160, 0.08);
+
+  --warn:  #f59e0b;
+  --error: #ef4444;
+  --info:  #3b82f6;
+  --ok:    #22c55e;
+
+  /* Radii */
+  --r-sm: 6px;
+  --r-md: 12px;
+  --r-lg: 20px;
+  --r-xl: 32px;
+
+  /* Transitions */
+  --t-fast: 150ms ease;
+  --t-mid:  280ms ease;
+  --t-slow: 500ms ease;
+
+  /* Shadows */
+  --shadow-sm: 0 1px 4px rgba(0,0,0,.25);
+  --shadow-md: 0 4px 20px rgba(0,0,0,.35);
+  --shadow-lg: 0 8px 40px rgba(0,0,0,.45);
+  --glow-accent: 0 0 24px rgba(0,229,160,.3);
+}
+
+/* ====== DARK THEME (default) ====== */
+[data-theme="dark"] {
+  --bg:           #0d0f14;
+  --bg-card:      #151820;
+  --bg-elevated:  #1c2030;
+  --bg-input:     #1a1e2a;
+  --bg-hover:     #222840;
+
+  --border:       #2a3050;
+  --border-focus: #00e5a0;
+
+  --text-primary:   #eef0f8;
+  --text-secondary: #8892b0;
+  --text-muted:     #525c7a;
+  --text-on-accent: #001a10;
+
+  --header-bg:    rgba(13, 15, 20, 0.88);
+  --scrollbar-bg: #1c2030;
+  --scrollbar-thumb: #2a3050;
+
+  --code-bg: #0a0c10;
+}
+
+/* ====== LIGHT THEME ====== */
+[data-theme="light"] {
+  --bg:           #f4f5f9;
+  --bg-card:      #ffffff;
+  --bg-elevated:  #eef0f7;
+  --bg-input:     #f8f9fc;
+  --bg-hover:     #e8eaf3;
+
+  --border:       #d0d5e8;
+  --border-focus: #00b87e;
+
+  --text-primary:   #0f1120;
+  --text-secondary: #4a5278;
+  --text-muted:     #8892b0;
+  --text-on-accent: #001a10;
+
+  --header-bg:    rgba(244, 245, 249, 0.92);
+  --scrollbar-bg: #e8eaf3;
+  --scrollbar-thumb: #c0c8e0;
+
+  --code-bg: #eef0f7;
+}

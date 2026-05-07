@@ -1,0 +1,157 @@
+// =============================================
+// Firestore Security Rules — PyCatalog
+// Разверните эти правила в Firebase Console
+// =============================================
+
+rules_version = '2';
+service cloud.firestore {
+  match /databases/{database}/documents {
+
+    // ── Helper functions ──────────────────────
+    function isLoggedIn() {
+      return request.auth != null;
+    }
+
+    function isOwner(uid) {
+      return isLoggedIn() && request.auth.uid == uid;
+    }
+
+    function getUserData() {
+      return get(/databases/$(database)/documents/users/$(request.auth.uid)).data;
+    }
+
+    function isAdmin() {
+      return isLoggedIn() && getUserData().role in ['admin', 'super_admin'];
+    }
+
+    function isSuperAdmin() {
+      return isLoggedIn() && getUserData().role == 'super_admin';
+    }
+
+    function isNotBanned() {
+      let user = getUserData();
+      return !user.banned || (user.banUntil != null && user.banUntil < request.time);
+    }
+
+    // ── Users ─────────────────────────────────
+    match /users/{uid} {
+      // Anyone can read user profiles (needed for author display)
+      allow read: if true;
+
+      // User can only update their own non-sensitive fields
+      allow update: if isOwner(uid) && isNotBanned()
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['nick', 'lastSeen', 'favorites'])
+        && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['role', 'banned', 'banReason', 'banUntil', 'uid', 'email', 'login']);
+
+      // Admin can update ban fields and role (but not super_admin role if not super_admin)
+      allow update: if isAdmin()
+        && (isSuperAdmin() || !('role' in request.resource.data.diff(resource.data).affectedKeys())
+            || request.resource.data.role != 'super_admin');
+
+      // No one can create user docs directly (done via register function)
+      allow create: if isOwner(uid);
+
+      // No deletion of users
+      allow delete: if isSuperAdmin();
+    }
+
+    // ── Projects ──────────────────────────────
+    match /projects/{projectId} {
+      // Approved projects readable by all
+      allow read: if resource.data.status == 'approved'
+        || (isLoggedIn() && resource.data.authorUid == request.auth.uid)
+        || isAdmin();
+
+      // Logged-in, non-banned users can create
+      allow create: if isLoggedIn() && isNotBanned()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.status == 'pending'
+        && request.resource.data.name is string
+        && request.resource.data.name.size() > 0
+        && request.resource.data.name.size() <= 80
+        && request.resource.data.description is string
+        && request.resource.data.description.size() > 0;
+
+      // Author can only update limited fields (not status)
+      allow update: if isLoggedIn() && resource.data.authorUid == request.auth.uid
+        && isNotBanned()
+        && !request.resource.data.diff(resource.data).affectedKeys()
+            .hasAny(['status', 'authorUid', 'moderatedBy', 'moderatedAt']);
+
+      // Downloads and favorites can be incremented by anyone logged in
+      allow update: if isLoggedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['downloads'])
+        && request.resource.data.downloads == resource.data.downloads + 1;
+
+      allow update: if isLoggedIn()
+        && request.resource.data.diff(resource.data).affectedKeys().hasOnly(['favorites']);
+
+      // Admins can update any field (moderation)
+      allow update: if isAdmin();
+
+      // Author can delete their own project
+      allow delete: if isLoggedIn() && resource.data.authorUid == request.auth.uid;
+      allow delete: if isAdmin();
+    }
+
+    // ── Comments ──────────────────────────────
+    match /comments/{commentId} {
+      // Anyone can read comments
+      allow read: if true;
+
+      // Logged-in non-banned users can create
+      allow create: if isLoggedIn() && isNotBanned()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.text is string
+        && request.resource.data.text.size() > 0
+        && request.resource.data.text.size() <= 1000;
+
+      // No updates to comments (immutable)
+      allow update: if false;
+
+      // Author or admin can delete
+      allow delete: if isLoggedIn()
+        && (resource.data.authorUid == request.auth.uid || isAdmin());
+    }
+
+    // ── Tickets ───────────────────────────────
+    match /tickets/{ticketId} {
+      // Author or admin can read
+      allow read: if isLoggedIn()
+        && (resource.data.authorUid == request.auth.uid || isAdmin());
+
+      // Logged-in non-banned users can create
+      allow create: if isLoggedIn() && isNotBanned()
+        && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.subject is string
+        && request.resource.data.subject.size() > 0
+        && request.resource.data.status == 'open';
+
+      // Author can only close or add replies
+      allow update: if isLoggedIn() && resource.data.authorUid == request.auth.uid
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['status', 'replies', 'updatedAt', 'hasNewReply'])
+        && (!'status' in request.resource.data.diff(resource.data).affectedKeys()
+            || request.resource.data.status == 'closed');
+
+      // Admin can update anything
+      allow update: if isAdmin();
+
+      // No deletion of tickets
+      allow delete: if isSuperAdmin();
+    }
+
+    // ── Settings (super admin only) ───────────
+    match /settings/{doc} {
+      allow read: if true; // Some settings (pylaunch, catalog types) are public
+      allow write: if isSuperAdmin();
+    }
+
+    // ── Deny everything else ──────────────────
+    match /{document=**} {
+      allow read, write: if false;
+    }
+  }
+}

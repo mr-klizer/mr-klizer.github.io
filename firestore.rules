@@ -74,11 +74,12 @@ service cloud.firestore {
         && request.resource.data.description is string
         && request.resource.data.description.size() > 0;
 
-      // Author can only update limited fields (not status)
+      // Author can update their project fields (not status/moderation fields)
       allow update: if isLoggedIn() && resource.data.authorUid == request.auth.uid
         && isNotBanned()
-        && !request.resource.data.diff(resource.data).affectedKeys()
-            .hasAny(['status', 'authorUid', 'moderatedBy', 'moderatedAt']);
+        && request.resource.data.diff(resource.data).affectedKeys()
+            .hasOnly(['name', 'description', 'type', 'version', 'tags',
+                      'githubUrl', 'readme', 'requirements', 'updatedAt']);
 
       // Downloads and favorites can be incremented by anyone logged in
       allow update: if isLoggedIn()
@@ -104,6 +105,7 @@ service cloud.firestore {
       // Logged-in non-banned users can create
       allow create: if isLoggedIn() && isNotBanned()
         && request.resource.data.authorUid == request.auth.uid
+        && request.resource.data.authorRole is string
         && request.resource.data.text is string
         && request.resource.data.text.size() > 0
         && request.resource.data.text.size() <= 1000;

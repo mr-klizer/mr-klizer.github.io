@@ -1,0 +1,650 @@
+/* =============================================
+   PyCatalog — UI Components
+   ============================================= */
+
+/* ── BUTTONS ── */
+.btn {
+  display: inline-flex;
+  align-items: center;
+  justify-content: center;
+  gap: .5rem;
+  padding: .6rem 1.4rem;
+  border-radius: var(--r-md);
+  font-family: var(--font-display);
+  font-size: .88rem;
+  font-weight: 700;
+  letter-spacing: .03em;
+  cursor: pointer;
+  border: 2px solid transparent;
+  transition: background var(--t-fast), border-color var(--t-fast),
+              color var(--t-fast), transform var(--t-fast), box-shadow var(--t-fast);
+  white-space: nowrap;
+  text-decoration: none;
+}
+.btn:active { transform: scale(.97); }
+.btn:disabled { opacity: .45; pointer-events: none; }
+
+.btn--primary {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border-color: var(--accent);
+}
+.btn--primary:hover {
+  background: var(--accent-dim);
+  border-color: var(--accent-dim);
+  box-shadow: var(--glow-accent);
+  color: var(--text-on-accent);
+}
+
+.btn--ghost {
+  background: transparent;
+  color: var(--text-primary);
+  border-color: var(--border);
+}
+.btn--ghost:hover {
+  border-color: var(--accent);
+  color: var(--accent);
+  background: var(--accent-soft);
+}
+
+.btn--danger {
+  background: transparent;
+  color: var(--error);
+  border-color: var(--error);
+}
+.btn--danger:hover { background: rgba(239,68,68,.12); }
+
+.btn--warn {
+  background: var(--warn);
+  color: #000;
+  border-color: var(--warn);
+}
+
+.btn--sm { padding: .4rem 1rem; font-size: .8rem; }
+.btn--lg { padding: .85rem 2rem; font-size: 1rem; }
+.btn--full { width: 100%; }
+.btn--icon-only { padding: .55rem; min-width: 40px; min-height: 40px; }
+
+.btn-icon {
+  background: none;
+  border: none;
+  cursor: pointer;
+  color: var(--text-secondary);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: .45rem;
+  border-radius: var(--r-sm);
+  transition: color var(--t-fast), background var(--t-fast);
+}
+.btn-icon:hover { color: var(--accent); background: var(--accent-soft); }
+
+/* ── FORM ELEMENTS ── */
+.form-group {
+  display: flex;
+  flex-direction: column;
+  gap: .4rem;
+  margin-bottom: 1.2rem;
+}
+
+label {
+  font-family: var(--font-display);
+  font-size: .82rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  letter-spacing: .04em;
+  text-transform: uppercase;
+}
+
+input[type="text"],
+input[type="email"],
+input[type="password"],
+input[type="url"],
+input[type="number"],
+input[type="search"],
+select,
+textarea {
+  width: 100%;
+  padding: .7rem 1rem;
+  background: var(--bg-input);
+  border: 1.5px solid var(--border);
+  border-radius: var(--r-md);
+  font-family: var(--font-mono);
+  font-size: .9rem;
+  color: var(--text-primary);
+  outline: none;
+  transition: border-color var(--t-fast), box-shadow var(--t-fast), background var(--t-fast);
+}
+
+input:focus, select:focus, textarea:focus {
+  border-color: var(--border-focus);
+  box-shadow: 0 0 0 3px var(--accent-soft);
+  background: var(--bg-card);
+}
+
+input::placeholder, textarea::placeholder { color: var(--text-muted); }
+
+select {
+  appearance: none;
+  background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='8' viewBox='0 0 12 8'%3E%3Cpath d='M1 1l5 5 5-5' stroke='%238892b0' stroke-width='1.5' fill='none' stroke-linecap='round'/%3E%3C/svg%3E");
+  background-repeat: no-repeat;
+  background-position: right 1rem center;
+  padding-right: 2.5rem;
+  cursor: pointer;
+}
+
+textarea { resize: vertical; min-height: 100px; line-height: 1.6; }
+
+.input-error {
+  border-color: var(--error) !important;
+  box-shadow: 0 0 0 3px rgba(239,68,68,.12) !important;
+}
+.field-error {
+  font-size: .78rem;
+  color: var(--error);
+  margin-top: .25rem;
+  font-family: var(--font-display);
+}
+
+.form-row {
+  display: grid;
+  grid-template-columns: 1fr 1fr;
+  gap: 1rem;
+}
+@media (max-width: 600px) { .form-row { grid-template-columns: 1fr; } }
+
+/* ── CARDS ── */
+.card {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.5rem;
+  transition: border-color var(--t-mid), transform var(--t-mid), box-shadow var(--t-mid);
+}
+.card:hover {
+  border-color: rgba(0,229,160,.35);
+  box-shadow: var(--shadow-md);
+}
+.card--elevated {
+  background: var(--bg-elevated);
+  box-shadow: var(--shadow-sm);
+}
+
+/* ── PROJECT CARD ── */
+.project-card {
+  position: relative;
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-lg);
+  padding: 1.4rem;
+  display: flex;
+  flex-direction: column;
+  gap: .75rem;
+  transition: border-color var(--t-mid), transform var(--t-mid), box-shadow var(--t-mid);
+  overflow: hidden;
+}
+.project-card::before {
+  content: '';
+  position: absolute;
+  top: 0; left: 0; right: 0;
+  height: 2px;
+  background: linear-gradient(90deg, transparent, var(--accent), transparent);
+  opacity: 0;
+  transition: opacity var(--t-mid);
+}
+.project-card:hover {
+  border-color: rgba(0,229,160,.4);
+  transform: translateY(-3px);
+  box-shadow: var(--shadow-md), var(--glow-accent);
+}
+.project-card:hover::before { opacity: 1; }
+
+.project-card__title {
+  font-family: var(--font-display);
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: var(--text-primary);
+  margin: 0;
+}
+.project-card__desc {
+  font-size: .85rem;
+  color: var(--text-secondary);
+  line-height: 1.5;
+  display: -webkit-box;
+  -webkit-line-clamp: 2;
+  -webkit-box-orient: vertical;
+  overflow: hidden;
+}
+.project-card__meta {
+  display: flex;
+  align-items: center;
+  gap: .5rem;
+  flex-wrap: wrap;
+  margin-top: auto;
+}
+.project-card__actions {
+  display: flex;
+  gap: .5rem;
+  margin-top: .5rem;
+}
+.project-card__star {
+  background: none;
+  border: none;
+  cursor: pointer;
+  font-size: 1.1rem;
+  padding: .3rem;
+  transition: transform var(--t-fast), color var(--t-fast);
+  color: var(--text-muted);
+}
+.project-card__star.active, .project-card__star:hover { color: var(--warn); transform: scale(1.2); }
+.project-card__star-count { font-size: .8rem; color: var(--text-muted); font-family: var(--font-display); }
+
+/* ── MODAL ── */
+.modal-overlay {
+  position: fixed;
+  inset: 0;
+  background: rgba(0,0,0,.6);
+  backdrop-filter: blur(4px);
+  z-index: 1000;
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  padding: 1rem;
+  animation: fadeIn var(--t-mid);
+}
+.modal-box {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2rem;
+  width: 100%;
+  max-width: 580px;
+  max-height: 90vh;
+  overflow-y: auto;
+  position: relative;
+  animation: slideUp var(--t-mid);
+  box-shadow: var(--shadow-lg);
+}
+.modal-close {
+  position: absolute;
+  top: 1rem; right: 1rem;
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-sm);
+  width: 32px; height: 32px;
+  display: flex; align-items: center; justify-content: center;
+  cursor: pointer;
+  color: var(--text-secondary);
+  font-size: .9rem;
+  transition: background var(--t-fast), color var(--t-fast);
+}
+.modal-close:hover { background: var(--error); color: #fff; border-color: var(--error); }
+
+/* ── TOAST ── */
+.toast-container {
+  position: fixed;
+  bottom: 1.5rem;
+  right: 1.5rem;
+  z-index: 2000;
+  display: flex;
+  flex-direction: column;
+  gap: .6rem;
+  max-width: 340px;
+}
+.toast {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: .8rem 1.2rem;
+  font-family: var(--font-display);
+  font-size: .85rem;
+  color: var(--text-primary);
+  box-shadow: var(--shadow-md);
+  display: flex;
+  align-items: center;
+  gap: .6rem;
+  animation: slideInRight var(--t-mid);
+}
+.toast--ok     { border-left: 3px solid var(--ok);    }
+.toast--error  { border-left: 3px solid var(--error);  }
+.toast--warn   { border-left: 3px solid var(--warn);   }
+.toast--info   { border-left: 3px solid var(--info);   }
+.toast.fade-out { animation: fadeOut var(--t-mid) forwards; }
+
+/* ── TABS ── */
+.tabs {
+  display: flex;
+  gap: .25rem;
+  border-bottom: 1px solid var(--border);
+  margin-bottom: 1.5rem;
+}
+.tab-btn {
+  background: none;
+  border: none;
+  padding: .6rem 1.2rem;
+  font-family: var(--font-display);
+  font-size: .85rem;
+  font-weight: 700;
+  color: var(--text-muted);
+  cursor: pointer;
+  border-bottom: 2px solid transparent;
+  margin-bottom: -1px;
+  transition: color var(--t-fast), border-color var(--t-fast);
+}
+.tab-btn.active { color: var(--accent); border-bottom-color: var(--accent); }
+.tab-btn:hover:not(.active) { color: var(--text-primary); }
+
+/* ── PAGINATION ── */
+.pagination {
+  display: flex;
+  gap: .5rem;
+  justify-content: center;
+  align-items: center;
+  margin-top: 2rem;
+}
+.page-btn {
+  min-width: 36px; height: 36px;
+  border: 1px solid var(--border);
+  background: var(--bg-card);
+  color: var(--text-secondary);
+  border-radius: var(--r-sm);
+  cursor: pointer;
+  font-family: var(--font-display);
+  font-size: .85rem;
+  font-weight: 700;
+  transition: all var(--t-fast);
+}
+.page-btn:hover, .page-btn.active {
+  background: var(--accent);
+  color: var(--text-on-accent);
+  border-color: var(--accent);
+}
+
+/* ── SEARCH BAR ── */
+.search-bar {
+  position: relative;
+  display: flex;
+  align-items: center;
+}
+.search-bar input {
+  padding-left: 2.8rem;
+  padding-right: 1rem;
+}
+.search-bar .search-icon {
+  position: absolute;
+  left: 1rem;
+  color: var(--text-muted);
+  pointer-events: none;
+  font-size: .9rem;
+}
+
+/* ── EMPTY STATE ── */
+.empty-state {
+  text-align: center;
+  padding: 4rem 1rem;
+  color: var(--text-muted);
+}
+.empty-state__icon { font-size: 3rem; margin-bottom: 1rem; }
+.empty-state__title {
+  font-family: var(--font-display);
+  font-size: 1.2rem;
+  font-weight: 700;
+  color: var(--text-secondary);
+  margin-bottom: .5rem;
+}
+
+/* ── SKELETON LOADER ── */
+.skeleton {
+  background: linear-gradient(90deg, var(--bg-elevated) 25%, var(--bg-hover) 50%, var(--bg-elevated) 75%);
+  background-size: 200% 100%;
+  animation: shimmer 1.4s infinite;
+  border-radius: var(--r-md);
+}
+
+/* ── FILE DROP ZONE ── */
+.drop-zone {
+  border: 2px dashed var(--border);
+  border-radius: var(--r-lg);
+  padding: 2.5rem;
+  text-align: center;
+  cursor: pointer;
+  transition: border-color var(--t-fast), background var(--t-fast);
+  color: var(--text-muted);
+}
+.drop-zone:hover, .drop-zone.drag-over {
+  border-color: var(--accent);
+  background: var(--accent-soft);
+  color: var(--accent);
+}
+.drop-zone__icon { font-size: 2.5rem; margin-bottom: .75rem; }
+.drop-zone__text { font-family: var(--font-display); font-size: .9rem; font-weight: 700; }
+
+/* ── COMMENT ── */
+.comment {
+  background: var(--bg-elevated);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 1rem;
+  margin-bottom: .75rem;
+}
+.comment__header {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  margin-bottom: .5rem;
+}
+.comment__author {
+  font-family: var(--font-display);
+  font-weight: 700;
+  color: var(--accent);
+  font-size: .85rem;
+}
+.comment__date { font-size: .75rem; color: var(--text-muted); }
+.comment__body { font-size: .88rem; color: var(--text-secondary); line-height: 1.6; }
+
+/* ── TICKET ── */
+.ticket {
+  background: var(--bg-card);
+  border: 1px solid var(--border);
+  border-radius: var(--r-md);
+  padding: 1.1rem 1.3rem;
+  cursor: pointer;
+  transition: border-color var(--t-fast);
+}
+.ticket:hover { border-color: var(--accent-dim); }
+.ticket.open  { border-left: 3px solid var(--ok); }
+.ticket.closed { border-left: 3px solid var(--text-muted); }
+
+/* ── USER AVATAR ── */
+.avatar {
+  width: 36px; height: 36px;
+  border-radius: 50%;
+  background: var(--accent-glow);
+  border: 2px solid var(--accent-dim);
+  display: flex; align-items: center; justify-content: center;
+  font-family: var(--font-display);
+  font-weight: 800;
+  font-size: .9rem;
+  color: var(--accent);
+  text-transform: uppercase;
+  flex-shrink: 0;
+}
+
+/* ── STATUS BADGE ── */
+.status-pill {
+  display: inline-flex;
+  align-items: center;
+  gap: .3rem;
+  padding: 3px 10px;
+  border-radius: 99px;
+  font-size: .72rem;
+  font-family: var(--font-display);
+  font-weight: 700;
+  letter-spacing: .04em;
+}
+.status-pill::before {
+  content: '';
+  width: 6px; height: 6px;
+  border-radius: 50%;
+  background: currentColor;
+}
+.status-pill--pending  { color: var(--warn);   background: rgba(245,158,11,.12); }
+.status-pill--approved { color: var(--ok);     background: rgba(34,197,94,.12);  }
+.status-pill--rejected { color: var(--error);  background: rgba(239,68,68,.12);  }
+.status-pill--draft    { color: var(--text-muted); background: var(--bg-elevated); }
+
+/* ── TABLE ── */
+.data-table {
+  width: 100%;
+  border-collapse: collapse;
+  font-size: .88rem;
+}
+.data-table th {
+  font-family: var(--font-display);
+  font-size: .75rem;
+  font-weight: 700;
+  text-transform: uppercase;
+  letter-spacing: .06em;
+  color: var(--text-muted);
+  padding: .7rem 1rem;
+  text-align: left;
+  border-bottom: 1px solid var(--border);
+}
+.data-table td {
+  padding: .85rem 1rem;
+  border-bottom: 1px solid var(--border);
+  color: var(--text-secondary);
+  vertical-align: middle;
+}
+.data-table tr:last-child td { border-bottom: none; }
+.data-table tbody tr { transition: background var(--t-fast); }
+.data-table tbody tr:hover { background: var(--bg-hover); }
+
+/* ── PROGRESS BAR ── */
+.progress-bar {
+  width: 100%;
+  height: 6px;
+  background: var(--bg-elevated);
+  border-radius: 3px;
+  overflow: hidden;
+}
+.progress-bar__fill {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 3px;
+  transition: width .5s ease;
+}
+
+/* ── PYLAUNCH BANNER ── */
+.pylaunch-banner {
+  background: linear-gradient(135deg, #0d1117 0%, #1a1e2a 50%, #0d1117 100%);
+  border: 1px solid var(--border);
+  border-radius: var(--r-xl);
+  padding: 2.5rem;
+  position: relative;
+  overflow: hidden;
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 2rem;
+}
+.pylaunch-banner::before {
+  content: '';
+  position: absolute;
+  top: -50%; left: -20%;
+  width: 400px; height: 400px;
+  background: radial-gradient(circle, rgba(0,229,160,.15) 0%, transparent 70%);
+  pointer-events: none;
+}
+[data-theme="light"] .pylaunch-banner {
+  background: linear-gradient(135deg, #e8f5f0 0%, #f0faf5 50%, #e8f5f0 100%);
+}
+
+/* ── PYLAUNCH LOGO ── */
+/*
+  Логотип — чёрный символ на чёрном фоне.
+  Тёмная тема: инвертируем (белый символ) + яркий зелёный оттенок через hue-rotate.
+  Светлая тема: оставляем чёрным, добавляем небольшую яркость.
+*/
+.pylaunch-logo {
+  display: block;
+  object-fit: contain;
+  user-select: none;
+}
+
+/* Тёмная тема: цвет #00e5a0 (как кнопка акцент) */
+[data-theme="dark"] .pylaunch-logo {
+  filter: brightness(0) invert(1) sepia(1) saturate(4) hue-rotate(118deg) brightness(1.05);
+}
+
+/* Светлая тема: цвет #007a52 (как кнопка акцент светлой темы) */
+[data-theme="light"] .pylaunch-logo {
+  filter: brightness(0) sepia(1) saturate(6) hue-rotate(118deg) brightness(0.55);
+}
+
+/* Hero-версия на странице PyLaunch */
+.pylaunch-logo--hero {
+  width: 96px;
+  height: 96px;
+  margin: 0 auto 1rem;
+}
+
+/* Декоративная версия в баннере на главной */
+.pylaunch-logo--banner {
+  width: 110px;
+  height: 110px;
+  opacity: 0.55;
+  flex-shrink: 0;
+}
+
+[data-theme="dark"] .pylaunch-logo--banner {
+  filter: brightness(0) invert(1) sepia(1) saturate(4) hue-rotate(118deg) brightness(1.05);
+  opacity: 0.55;
+}
+
+[data-theme="light"] .pylaunch-logo--banner {
+  filter: brightness(0) sepia(1) saturate(6) hue-rotate(118deg) brightness(0.55);
+  opacity: 0.45;
+}
+
+/* ── PYCATALOG LOGO (PC иконка) ── */
+.pc-logo {
+  display: inline-block;
+  object-fit: contain;
+  flex-shrink: 0;
+}
+
+/* Тёмная тема: инвертируем + красим в акцентный #00e5a0 */
+[data-theme="dark"] .pc-logo {
+  filter: brightness(0) invert(1) sepia(1) saturate(4) hue-rotate(118deg) brightness(1.05);
+}
+
+/* Светлая тема: красим в #007a52 */
+[data-theme="light"] .pc-logo {
+  filter: brightness(0) sepia(1) saturate(6) hue-rotate(118deg) brightness(0.55);
+}
+
+/* В шапке сайта рядом с текстом логотипа */
+.pc-logo--header {
+  width: 28px;
+  height: 28px;
+  vertical-align: middle;
+}
+
+/* На страницах входа/регистрации/забыли пароль */
+.pc-logo--auth {
+  width: 56px;
+  height: 56px;
+  display: block;
+  margin: 0 auto;
+}
+
+/* Маленькая иконка в eyebrow тексте на главной */
+.pc-logo--eyebrow {
+  width: 16px;
+  height: 16px;
+  display: inline-block;
+  vertical-align: middle;
+  margin-right: 2px;
+  margin-top: -2px;
+}

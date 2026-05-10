@@ -1,0 +1,133 @@
+<!DOCTYPE html>
+<html lang="ru" data-theme="dark">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>PyCatalog — Каталог Python проектов</title>
+  <meta name="description" content="Каталог Python проектов с быстрым поиском, скачиванием архивов и системой комментариев." />
+  <link rel="icon" href="assets/pycatalog-logo.png" type="image/png" />
+  <link rel="apple-touch-icon" href="assets/pycatalog-logo.png" />
+
+  <!-- Google Fonts -->
+  <link rel="preconnect" href="https://fonts.googleapis.com" />
+  <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+  <link href="https://fonts.googleapis.com/css2?family=Space+Mono:ital,wght@0,400;0,700;1,400&family=Syne:wght@400;600;700;800&display=swap" rel="stylesheet" />
+
+  <!-- Firebase SDK -->
+  <script type="module">
+    import { initializeApp } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-app.js';
+    import { getAuth } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-auth.js';
+    import { getFirestore } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-firestore.js';
+    import { getStorage } from 'https://www.gstatic.com/firebasejs/10.12.2/firebase-storage.js';
+
+    const firebaseConfig = {
+      apiKey: "AIzaSyBQdNZ7fVobdopQeyOIkZ4m6DWpr6HWThM",
+      authDomain: "py-catalog.firebaseapp.com",
+      projectId: "py-catalog",
+      storageBucket: "py-catalog.firebasestorage.app",
+      messagingSenderId: "605918141150",
+      appId: "1:605918141150:web:519037f36d976357e8004f",
+      measurementId: "G-4SXKEB0YZB"
+    };
+
+    const app = initializeApp(firebaseConfig);
+    window.__firebase = {
+      app,
+      auth: getAuth(app),
+      db: getFirestore(app),
+      storage: getStorage(app)
+    };
+
+    window.dispatchEvent(new Event('firebase-ready'));
+  </script>
+
+  <!-- JSZip for archive creation -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/jszip/3.10.1/jszip.min.js"></script>
+
+  <link rel="stylesheet" href="css/vars.css" />
+  <link rel="stylesheet" href="css/base.css" />
+  <link rel="stylesheet" href="css/components.css" />
+  <link rel="stylesheet" href="css/layout.css" />
+  <link rel="stylesheet" href="css/animations.css" />
+</head>
+<body>
+  <!-- Top navigation -->
+  <header id="site-header" class="site-header">
+    <div class="header-inner">
+      <a href="/" class="logo" data-link>
+        <img src="assets/pycatalog-logo.svg" class="pc-logo pc-logo--header" alt="PyCatalog" />
+        <span class="logo-text">Py<strong>Catalog</strong></span>
+      </a>
+      <nav class="header-nav">
+        <a href="/catalog" data-link class="nav-link">Каталог</a>
+        <a href="/about" data-link class="nav-link">О проекте</a>
+        <a href="/pylaunch" data-link class="nav-link nav-link--accent">PyLaunch</a>
+      </nav>
+      <div class="header-actions">
+        <button class="btn-icon" id="theme-toggle" title="Сменить тему" aria-label="Переключить тему">
+          <span class="icon-sun">☀</span>
+          <span class="icon-moon">☽</span>
+        </button>
+        <div id="auth-area" class="auth-area">
+          <a href="/login" data-link class="btn btn--ghost btn--sm">Войти</a>
+          <a href="/register" data-link class="btn btn--primary btn--sm">Регистрация</a>
+        </div>
+        <div id="user-menu" class="user-menu" style="display:none">
+          <button class="user-avatar-btn" id="user-avatar-btn">
+            <span class="user-avatar" id="user-avatar-display">U</span>
+            <span id="user-nick-display"></span>
+            <span class="chevron">▾</span>
+          </button>
+          <div class="user-dropdown" id="user-dropdown">
+            <a href="/profile" data-link>Мой профиль</a>
+            <a href="/my-projects" data-link>Мои проекты</a>
+            <a href="/favorites" data-link>Избранное</a>
+            <a href="/support" data-link>Поддержка</a>
+            <div id="admin-links" style="display:none">
+              <hr />
+              <a href="/admin" data-link>Панель администратора</a>
+            </div>
+            <hr />
+            <button id="logout-btn" class="dropdown-btn dropdown-btn--danger">Выйти</button>
+          </div>
+        </div>
+      </div>
+      <button class="burger" id="burger" aria-label="Меню">
+        <span></span><span></span><span></span>
+      </button>
+    </div>
+    <!-- Mobile nav -->
+    <div class="mobile-nav" id="mobile-nav">
+      <a href="/catalog" data-link class="nav-link">Каталог</a>
+      <a href="/about" data-link class="nav-link">О проекте</a>
+      <a href="/pylaunch" data-link class="nav-link">PyLaunch</a>
+      <hr />
+      <div id="mobile-auth">
+        <a href="/login" data-link class="btn btn--ghost">Войти</a>
+        <a href="/register" data-link class="btn btn--primary">Регистрация</a>
+      </div>
+    </div>
+  </header>
+
+  <!-- Page container — JS renders pages here -->
+  <main id="app" class="app-container"></main>
+
+  <!-- Global toast notifications -->
+  <div id="toast-container" class="toast-container" aria-live="polite"></div>
+
+  <!-- Global modal -->
+  <div id="modal-overlay" class="modal-overlay" style="display:none" role="dialog" aria-modal="true">
+    <div class="modal-box" id="modal-box">
+      <button class="modal-close" id="modal-close" aria-label="Закрыть">✕</button>
+      <div id="modal-content"></div>
+    </div>
+  </div>
+
+  <!-- JS modules -->
+  <script type="module" src="js/config.js"></script>
+  <script type="module" src="js/auth.js"></script>
+  <script type="module" src="js/router.js"></script>
+  <script type="module" src="js/ui.js"></script>
+  <script type="module" src="js/main.js"></script>
+</body>
+</html>
